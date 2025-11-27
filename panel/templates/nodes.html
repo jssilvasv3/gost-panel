@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nodes - GOST Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Nodes (Chain Multi-Hop)</h1>
+
+        <div class="nav">
+            <a href="{{ url_for('index') }}">⬅️ Voltar</a>
+            <a href="{{ url_for('create_node') }}">➕ Criar Node</a>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="messages">
+            {% for m in messages %}
+            <li>{{ m }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <h2>Nodes Cadastrados</h2>
+
+        {% if nodes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Forward (Endereço)</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for n in nodes %}
+                <tr>
+                    <td>{{ n[0] }}</td>
+                    <td><strong>{{ n[1] }}</strong></td>
+                    <td><code>{{ n[2] }}</code></td>
+                    <td>{{ n[3] or '-' }}</td>
+                    <td>
+                        <div class="actions">
+                            <form class="inline-form" action="{{ url_for('delete_node', nid=n[0]) }}" method="post">
+                                <button type="submit" class="danger" onclick="return confirm('Remover este node?')">🗑️
+                                    Remover</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="text-align: center; color: #6b7280; padding: 2rem;">
+            Nenhum node cadastrado. Nodes são usados para criar chains multi-hop.
+        </p>
+        {% endif %}
+
+        <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem;">
+            <h3 style="margin-top: 0;">ℹ️ O que são Nodes?</h3>
+            <p>Nodes são servidores intermediários usados para criar cadeias (chains) de múltiplos saltos.</p>
+            <p><strong>Exemplo:</strong> Cliente → Node1 → Node2 → Destino Final</p>
+            <p>Isso aumenta a segurança e permite bypass de firewalls complexos.</p>
+        </div>
+    </div>
+</body>
+
+</html>

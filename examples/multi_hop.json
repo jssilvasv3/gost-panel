@@ -1,0 +1,23 @@
+{
+  "servers": [
+    {
+      "name": "local",
+      "listen": "tcp://:2222",
+      "forward": "chain://hop1,hop2,exit"
+    }
+  ],
+  "nodes": [
+    {
+      "name": "hop1",
+      "forward": "tls://hop1.example:8443"
+    },
+    {
+      "name": "hop2",
+      "forward": "kcp://hop2.example:29900"
+    },
+    {
+      "name": "exit",
+      "forward": "tcp://1.2.3.4:22"
+    }
+  ]
+}

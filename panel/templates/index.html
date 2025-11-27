@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOST Panel - Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <h1>GOST Panel</h1>
+
+    <div class="nav">
+      <a href="{{ url_for('create_user') }}">➕ Criar Regra</a>
+      <a href="{{ url_for('list_nodes') }}">🔗 Nodes</a>
+      <a href="{{ url_for('protocols.protocols_page') }}">📋 Protocolos</a>
+      <a href="{{ url_for('logout') }}">🚪 Logout</a>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="messages">
+      {% for m in messages %}
+      <li>{{ m }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+      <form action="{{ url_for('apply_config') }}" method="post" style="display: inline;">
+        <button type="submit">⚙️ Aplicar Configuração</button>
+      </form>
+      <form action="{{ url_for('reload_config') }}" method="post" style="display: inline;">
+        <button type="submit" class="secondary" style="background: #10b981;">🔄 Reload (sem restart)</button>
+      </form>
+    </div>
+
+    <!-- Status Dashboard -->
+    <div id="status-dashboard"
+      style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 2rem; color: white;">
+      <h3 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>📊</span> Status do Sistema
+        <button onclick="refreshStatus()"
+          style="margin-left: auto; background: rgba(255,255,255,0.2); border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; color: white; cursor: pointer; font-size: 0.9rem;">
+          🔄 Atualizar
+        </button>
+      </h3>
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <div
+          style="background: rgba(255,255,255,0.15); padding: 1rem; border-radius: 0.5rem; backdrop-filter: blur(10px);">
+          <div style="font-size: 0.9rem; opacity: 0.9;">Painel</div>
+          <div style="font-size: 1.5rem; font-weight: bold; margin-top: 0.5rem;">
+            <span id="panel-status">🟢 Online</span>
+          </div>
+        </div>
+        <div
+          style="background: rgba(255,255,255,0.15); padding: 1rem; border-radius: 0.5rem; backdrop-filter: blur(10px);">
+          <div style="font-size: 0.9rem; opacity: 0.9;">Serviço GOST</div>
+          <div style="font-size: 1.5rem; font-weight: bold; margin-top: 0.5rem;">
+            <span id="gost-status">⏳ Verificando...</span>
+          </div>
+        </div>
+        <div
+          style="background: rgba(255,255,255,0.15); padding: 1rem; border-radius: 0.5rem; backdrop-filter: blur(10px);">
+          <div style="font-size: 0.9rem; opacity: 0.9;">Túneis Ativos</div>
+          <div style="font-size: 1.5rem; font-weight: bold; margin-top: 0.5rem;">
+            <span id="active-tunnels">-</span> / <span id="total-rules">-</span>
+          </div>
+        </div>
+        <div
+          style="background: rgba(255,255,255,0.15); padding: 1rem; border-radius: 0.5rem; backdrop-filter: blur(10px);">
+          <div style="font-size: 0.9rem; opacity: 0.9;">Portas Abertas</div>
+          <div style="font-size: 1rem; font-weight: bold; margin-top: 0.5rem;">
+            <span id="listening-ports">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function refreshStatus() {
+        fetch('/status')
+          .then(res => res.json())
+          .then(data => {
+            // Update GOST service status
+            const gostStatus = document.getElementById('gost-status');
+            if (data.gost_service === 'running') {
+              gostStatus.innerHTML = '🟢 Running' + (data.gost_pid ? ` (PID: ${data.gost_pid})` : '');
+              gostStatus.style.color = '#10b981';
+            } else if (data.gost_service === 'stopped') {
+              gostStatus.innerHTML = '🔴 Stopped';
+              gostStatus.style.color = '#ef4444';
+            } else {
+              gostStatus.innerHTML = '🟡 Unknown';
+              gostStatus.style.color = '#f59e0b';
+            }
+
+            // Update tunnels
+            document.getElementById('active-tunnels').textContent = data.active_tunnels || 0;
+            document.getElementById('total-rules').textContent = data.total_rules || 0;
+
+            // Update ports
+            const ports = data.listening_ports || [];
+            document.getElementById('listening-ports').textContent = ports.length > 0 ? ports.join(', ') : 'Nenhuma';
+          })
+          .catch(err => {
+            console.error('Error fetching status:', err);
+            document.getElementById('gost-status').innerHTML = '❌ Erro';
+          });
+      }
+
+      // Auto-refresh every 10 seconds
+      refreshStatus();
+      setInterval(refreshStatus, 10000);
+    </script>
+
+    <h2>Regras / Túneis Configurados</h2>
+
+    {% if users %}
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Protocolo</th>
+          <th>Porta</th>
+          <th>Credenciais</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td><strong>{{ u[1] }}</strong></td>
+          <td><span class="badge">{{ u[2] }}</span></td>
+          <td><code>{{ u[3] }}</code></td>
+          <td style="font-family: monospace; font-size: 0.85em;">
+            {% if u[2].lower() == 'ss' or u[2].lower() == 'trojan' %}
+            <strong>Senha:</strong> {{ u[5] if u[5] else 'N/A' }}<br>
+            {% if u[6] and 'method=' in u[6] %}
+            <strong>Método:</strong> {{ u[6].split('method=')[1].split(',')[0] }}
+            {% endif %}
+            {% elif u[2].lower() == 'vmess' or u[2].lower() == 'vless' %}
+            {% if u[6] and 'uuid=' in u[6] %}
+            <strong>UUID:</strong> {{ u[6].split('uuid=')[1].split(',')[0][:20] }}...
+            {% else %}
+            <em>UUID não configurado</em>
+            {% endif %}
+            {% elif u[2].lower() == 'socks5' or u[2].lower() == 'http' %}
+            <em>Sem autenticação</em>
+            {% else %}
+            -
+            {% endif %}
+          </td>
+          <td>
+            <div class="actions">
+              <a href="{{ url_for('edit_user', uid=u[0]) }}" class="btn" style="background: #f59e0b;">✏️ Editar</a>
+              <form class="inline-form" action="{{ url_for('delete_user', uid=u[0]) }}" method="post">
+                <button type="submit" class="danger" onclick="return confirm('Remover esta regra?')">🗑️
+                  Remover</button>
+              </form>
+              <a href="{{ url_for('user_qr', uid=u[0]) }}" target="_blank">📱 QR Code</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; color: #6b7280; padding: 2rem;">
+      Nenhuma regra configurada. Clique em "Criar Regra" para adicionar um túnel.
+    </p>
+    {% endif %}
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar Regra - GOST Panel</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <h1>🚀 Criar Nova Regra</h1>
+
+    <div
+      style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 2rem; color: white;">
+      <h3 style="margin-top: 0;">ℹ️ Configuração Automática</h3>
+      <p style="margin-bottom: 0; opacity: 0.9;">
+        Selecione apenas o protocolo desejado. Todas as configurações (porta, senha, UUID, método) serão geradas
+        automaticamente!
+      </p>
+    </div>
+
+    <form method="post">
+      <div class="form-group">
+        <label for="protocol">Selecione o Protocolo:</label>
+        <select id="protocol" name="protocol" required style="font-size: 1.1em; padding: 1rem;">
+          <option value="">-- Escolha um Protocolo --</option>
+
+          <optgroup label="🔒 Proxies Básicos">
+            <option value="socks5">SOCKS5 (Porta 1081)</option>
+            <option value="socks4">SOCKS4 (Porta 1080)</option>
+            <option value="http">HTTP Proxy (Porta 8080)</option>
+            <option value="https">HTTPS Proxy (Porta 8443)</option>
+          </optgroup>
+
+          <optgroup label="🛡️ Protocolos Criptografados (Xray)">
+            <option value="ss">Shadowsocks (Porta 8389)</option>
+            <option value="vmess">VMess (Porta 10086)</option>
+            <option value="vless">VLESS (Porta 10087)</option>
+            <option value="trojan">Trojan (Porta 8443)</option>
+          </optgroup>
+
+          <optgroup label="🚀 Protocolos Avançados (GOST)">
+            <option value="ws">WebSocket (Porta 8081)</option>
+            <option value="wss">WebSocket Secure (Porta 8082)</option>
+            <option value="http2">HTTP/2 (Porta 8083)</option>
+            <option value="h2">H2 (Porta 8084)</option>
+            <option value="h2c">H2C (Porta 8085)</option>
+            <option value="grpc">gRPC (Porta 8086)</option>
+            <option value="quic">QUIC (Porta 8087)</option>
+            <option value="kcp">KCP (Porta 8088)</option>
+            <option value="ssh">SSH Tunnel (Porta 2222)</option>
+            <option value="sshd">SSH Server (Porta 2223)</option>
+          </optgroup>
+
+          <optgroup label="🔧 Túneis Especiais">
+            <option value="tcp">TCP Tunnel (Porta 9000)</option>
+            <option value="udp">UDP Tunnel (Porta 9001)</option>
+            <option value="rtcp">RTCP (Porta 9002)</option>
+            <option value="rudp">RUDP (Porta 9003)</option>
+            <option value="tls">TLS Tunnel (Porta 9004)</option>
+            <option value="dtls">DTLS (Porta 9005)</option>
+            <option value="icmp">ICMP Tunnel (Porta 9006)</option>
+          </optgroup>
+
+          <optgroup label="🌐 DNS & Redes">
+            <option value="dns">DNS Proxy (Porta 53)</option>
+            <option value="doh">DNS over HTTPS (Porta 8053)</option>
+            <option value="dot">DNS over TLS (Porta 853)</option>
+            <option value="relay">Relay (Porta 9100)</option>
+            <option value="forward">Forward (Porta 9101)</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div style="display: flex; gap: 1rem;">
+        <button type="submit">✅ Criar Regra</button>
+        <a href="{{ url_for('index') }}" class="btn" style="background: #6b7280;">⬅️ Voltar</a>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

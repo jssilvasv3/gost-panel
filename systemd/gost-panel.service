@@ -1,0 +1,14 @@
+[Unit]
+Description=Gost Panel (Flask)
+After=network.target
+
+[Service]
+User=gostsvc
+Group=gostsvc
+WorkingDirectory=/opt/gost-panel
+ExecStart=/opt/gost-panel/venv/bin/python /opt/gost-panel/app.py
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

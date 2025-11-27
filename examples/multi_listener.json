@@ -1,0 +1,29 @@
+{
+  "servers": [
+    {
+      "name": "tcp-forward-2222",
+      "listen": "tcp://:2222",
+      "forward": "chain://nodeA,nodeB"
+    },
+    {
+      "name": "udp-dns-5353",
+      "listen": "udp://:5353",
+      "forward": "udp://1.2.3.4:53"
+    },
+    {
+      "name": "metrics",
+      "listen": "tcp://127.0.0.1:9090",
+      "protocol": "prometheus"
+    }
+  ],
+  "nodes": [
+    {
+      "name": "nodeA",
+      "forward": "tls://next1.example:8443"
+    },
+    {
+      "name": "nodeB",
+      "forward": "socks5://127.0.0.1:1080"
+    }
+  ]
+}

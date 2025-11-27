@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Node - GOST Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Criar Novo Node</h1>
+
+        <form method="post">
+            <div class="form-group">
+                <label for="name">Nome do Node:</label>
+                <input type="text" id="name" name="name" required placeholder="Ex: hop1, proxy-us, exit-node">
+                <small style="color: #6b7280;">Nome único para identificar este node nas chains</small>
+            </div>
+
+            <div class="form-group">
+                <label for="forward">Forward (Endereço do Node):</label>
+                <input type="text" id="forward" name="forward" required placeholder="Ex: tls://hop1.example.com:8443">
+                <small style="color: #6b7280;">Formato: protocolo://host:porta</small>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Descrição (Opcional):</label>
+                <input type="text" id="description" name="description" placeholder="Ex: Servidor intermediário nos EUA">
+            </div>
+
+            <div
+                style="margin-top: 2rem; padding: 1rem; background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 0.5rem;">
+                <h4 style="margin-top: 0; color: #1e40af;">💡 Exemplos de Nodes</h4>
+                <ul style="margin: 0.5rem 0;">
+                    <li><code>tls://proxy1.example.com:8443</code> - Node com TLS</li>
+                    <li><code>ws://relay.example.com:80</code> - Node com WebSocket</li>
+                    <li><code>kcp://hop.example.com:29900</code> - Node com KCP (UDP)</li>
+                    <li><code>socks5://intermediate:1080</code> - Node SOCKS5</li>
+                </ul>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit">✅ Criar Node</button>
+                <a href="{{ url_for('list_nodes') }}" class="btn" style="background: #6b7280;">⬅️ Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

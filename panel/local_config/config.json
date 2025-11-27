@@ -1,0 +1,17 @@
+{
+  "servers": [
+    {
+      "name": "tunel",
+      "listen": "socks5://:1081",
+      "forward": "tcp://1.2.3.4:22"
+    },
+    {
+      "name": "tun2",
+      "listen": "socks5://:1081",
+      "forward": "tcp://1.2.3.4:22"
+    }
+  ],
+  "metrics": {
+    "listen": "127.0.0.1:9090"
+  }
+}

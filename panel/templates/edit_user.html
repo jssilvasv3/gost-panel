@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Regra - GOST Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Editar Regra #{{ user.id }}</h1>
+
+        <form method="post">
+            <div class="form-group">
+                <label for="name">Nome da Regra:</label>
+                <input type="text" id="name" name="name" required value="{{ user.name }}"
+                    placeholder="Ex: Meu Túnel SOCKS5">
+            </div>
+
+            <div class="form-group">
+                <label for="protocol">Protocolo:</label>
+                <select id="protocol" name="protocol" required>
+                    <option value="socks5" {% if user.protocol=='socks5' %}selected{% endif %}>SOCKS5</option>
+                    <option value="socks4" {% if user.protocol=='socks4' %}selected{% endif %}>SOCKS4</option>
+                    <option value="http" {% if user.protocol=='http' %}selected{% endif %}>HTTP Proxy</option>
+                    <option value="https" {% if user.protocol=='https' %}selected{% endif %}>HTTPS Proxy</option>
+                    <option value="ss" {% if user.protocol=='ss' %}selected{% endif %}>Shadowsocks</option>
+                    <option value="vmess" {% if user.protocol=='vmess' %}selected{% endif %}>VMess</option>
+                    <option value="vless" {% if user.protocol=='vless' %}selected{% endif %}>VLESS</option>
+                    <option value="tcp" {% if user.protocol=='tcp' %}selected{% endif %}>TCP Tunnel</option>
+                    <option value="udp" {% if user.protocol=='udp' %}selected{% endif %}>UDP Tunnel</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="listen">Listen (Endereço de Escuta):</label>
+                <input type="text" id="listen" name="listen" required value="{{ user.listen }}"
+                    placeholder="Ex: socks5://:1081">
+                <small style="color: #6b7280;">Formato: protocolo://host:porta ou :porta</small>
+            </div>
+
+            <div class="form-group">
+                <label for="target">Target (Destino):</label>
+                <input type="text" id="target" name="target" required value="{{ user.target }}"
+                    placeholder="Ex: tcp://1.2.3.4:22">
+                <small style="color: #6b7280;">Formato: protocolo://host:porta. Para load balancing, separe múltiplos
+                    targets por vírgula</small>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha (Opcional):</label>
+                <input type="text" id="password" name="password" value="{{ user.password }}"
+                    placeholder="Deixe em branco se não usar autenticação">
+            </div>
+
+            <div class="form-group">
+                <label for="extra">Parâmetros Extras (Opcional):</label>
+                <input type="text" id="extra" name="extra" value="{{ user.extra }}"
+                    placeholder="Ex: method=aes-256-gcm,rl=1024,strategy=round">
+                <small style="color: #6b7280;">Para Shadowsocks: método de criptografia. Rate limit: rl=kbps. Load
+                    balancing: strategy=round|random|hash</small>
+            </div>
+
+            <div class="form-group">
+                <label for="chain_nodes">Chain Nodes (Opcional - Multi-Hop):</label>
+                <input type="text" id="chain_nodes" name="chain_nodes" value="{{ user.chain_nodes }}"
+                    placeholder="Ex: hop1,hop2,exit">
+                <small style="color: #6b7280;">Separar nodes por vírgula para criar chain. Deixe em branco para conexão
+                    direta. <a href="{{ url_for('list_nodes') }}" target="_blank">Gerenciar Nodes</a></small>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit">💾 Salvar Alterações</button>
+                <a href="{{ url_for('index') }}" class="btn" style="background: #6b7280;">⬅️ Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

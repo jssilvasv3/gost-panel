@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - GOST Panel</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login Admin</h1>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="messages">
+        {% for m in messages %}
+          <li>{{ m }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <form method="post">
+      <div class="form-group">
+        <label for="username">Usuário:</label>
+        <input type="text" id="username" name="username" required autofocus>
+      </div>
+      <div class="form-group">
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit">🔓 Entrar</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% extends "index.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Protocolos Disponíveis</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Protocolo</th>
+                <th>Descrição</th>
+                <th>Mobile</th>
+                <th>QR Code</th>
+                <th>Status</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for p in protocols %}
+            <tr>
+                <td>{{ p.name }}</td>
+                <td>{{ p.desc }}</td>
+                <td>{{ p.mobile }}</td>
+                <td>
+                    {% if p.qr %}
+                        <span class="badge bg-success">Sim</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Não</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if p.status %}
+                        <span class="badge bg-success">Ativo</span>
+                    {% else %}
+                        <span class="badge bg-danger">Desativado</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm toggle-btn"
+                            data-name="{{ p.name }}">
+                        Alternar
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+<script>
+document.querySelectorAll(".toggle-btn").forEach(button => {
+    button.addEventListener("click", () => {
+        fetch("/protocols/toggle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: button.dataset.name })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

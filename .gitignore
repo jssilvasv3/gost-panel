@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Secrets
+*.key
+*.pem
+*.crt
+*.p12
+secrets/
+.env
+
+# Temporary
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Node (se usar)
+node_modules/
+package-lock.json
+
+# Nginx
+*.pid
+
+# Specific
+panel.conf.json
+config_local.json
