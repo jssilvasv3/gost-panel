@@ -333,8 +333,8 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 
 ## 📞 Contato
 
-- **GitHub:** [@SEU_USUARIO](https://github.com/SEU_USUARIO)
-- **Email:** seu@email.com
+- **GitHub:** [@jssilvasv3](https://github.com/jssilvasv3)
+- **Email:** jsilvasv3@gmail.com
 
 ---
 
