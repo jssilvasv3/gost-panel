@@ -342,6 +342,6 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 
 **⭐ Se este projeto foi útil, deixe uma estrela! ⭐**
 
-Made with ❤️ by [Seu Nome]
+Made with ❤️ by [JS]
 
 </div>
